@@ -1,7 +1,8 @@
 import {createBrowserRouter} from 'react-router-dom'
 import { Layout } from './layouts/Layout'
 import { Products } from './pages/Products'
-import { NewProduct } from './pages/NewProduct'
+//Importar la funcion pero con un alias
+import { NewProduct, action as newProductAction } from './pages/NewProduct'
 
 export const router = createBrowserRouter([
     //Grupo de paginas que comparten el layout principal
@@ -17,7 +18,9 @@ export const router = createBrowserRouter([
             {
                 //Le indicas a que ruta corresponde ese elemento
                 path: 'productos/nuevo',
-                element: <NewProduct />
+                element: <NewProduct />,
+                //Se ejecuta cuando presionas submir para el formulario dentro del componente indicado
+                action: newProductAction
             },
         ]
     }

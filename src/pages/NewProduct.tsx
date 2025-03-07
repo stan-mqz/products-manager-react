@@ -1,5 +1,7 @@
 import { Link, Form, useActionData, ActionFunctionArgs } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { addProduct } from "../services/ProductService";
+
 //Funcion para la accion
 export const action = async ({request}: ActionFunctionArgs) => {
   //Forma para obtener los datos del formulario descomponiendo el objeto request y su metodo formData)()
@@ -21,6 +23,9 @@ export const action = async ({request}: ActionFunctionArgs) => {
   if (error) {
     return error
   }
+
+  //Funcion en el archivo de services a la cual le pasamos los datos
+  addProduct(data)
 
   //Una accion siempre debe retornar algo
   return {}

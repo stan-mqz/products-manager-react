@@ -1,4 +1,4 @@
-import { Link, Form, useActionData, ActionFunctionArgs } from "react-router-dom";
+import { Link, Form, useActionData, ActionFunctionArgs, redirect } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { addProduct } from "../services/ProductService";
 
@@ -25,10 +25,12 @@ export const action = async ({request}: ActionFunctionArgs) => {
   }
 
   //Funcion en el archivo de services a la cual le pasamos los datos
-  addProduct(data)
 
-  //Una accion siempre debe retornar algo
-  return {}
+  //Ejecuta todo el codigo pero se detiene aca, de esa manera el return no se ejecuta hasta que esta funcion termina de ejecutarse
+  await addProduct(data)
+
+  //Una accion siempre debe retornar algo, en este caso, redirecciona al usuario a la página principal
+  return redirect('/')
 }
 
 export const NewProduct = () => {

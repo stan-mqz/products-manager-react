@@ -23,12 +23,14 @@ export const addProduct = async (data : ProductData) => {
             //Si el resultado es correcto enviamos los datos a esta URL
             const URL = `${import.meta.env.VITE_API_URL}/products`
             //Con axios utilizamos el meotodo POST, que pide una URL y los datos
-            const { data } = await axios.post(URL, {
+              await axios.post(URL, {
 
                 //Los valores que tendremos disponibles para enviar seran los que hemos definido en nuestro type "DraftProductsSchema"
                 name: result.output.name,
                 price: result.output.price
             })
+
+          
         } else {
             throw new Error("Datos no validos");
             

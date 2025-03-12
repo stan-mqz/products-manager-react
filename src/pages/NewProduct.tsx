@@ -35,7 +35,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
 export const NewProduct = () => {
 
-  //De esta manera con useActionData() podemos acceder desde el componete a lo que nos retorna la accion 
+  //Usando el hook useActionData() puedes acceder desde tu componente a lo que sea que la accion a la que esta conectado haya retornado
   const error = useActionData() as string
 
   return (

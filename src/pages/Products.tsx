@@ -1,4 +1,16 @@
 import { Link } from "react-router-dom";
+import { getProducts } from "../services/ProductService";
+
+export const loader = async () => {
+ 
+ const products = await getProducts()
+ console.log(products)
+
+
+
+  //Al igual que las acciones siempre debe retornar algo
+  return {}
+}
 
 export const Products = () => {
   return (

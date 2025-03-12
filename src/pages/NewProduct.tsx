@@ -35,6 +35,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
 export const NewProduct = () => {
 
+  //De esta manera con useActionData() podemos acceder desde el componete a lo que nos retorna la accion 
   const error = useActionData() as string
 
   return (

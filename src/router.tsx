@@ -1,6 +1,6 @@
 import {createBrowserRouter} from 'react-router-dom'
 import { Layout } from './layouts/Layout'
-import { Products } from './pages/Products'
+import { Products, loader as productsLoader} from './pages/Products'
 //Importar la funcion pero con un alias
 import { NewProduct, action as newProductAction } from './pages/NewProduct'
 
@@ -12,7 +12,9 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Products/>
+                element: <Products/>,
+                //Cuando se carga este componente manda a llamar la funcion de loader
+                loader: productsLoader
             },
 
             {

@@ -1,5 +1,5 @@
 import { safeParse } from "valibot";
-import { DraftProductsSchema } from "../types/types"
+import { DraftProductsSchema, ProductsSchema } from "../types/types";
 import axios from "axios";
 
 //Type que indica de que tipo son los datos que vamos a recibir
@@ -12,7 +12,7 @@ export const addProduct = async (data : ProductData) => {
     try {
         //Cambiar el tipo de las propiedades del objeto data
 
-        //Verificamos que los datos pasados al formulario tengan el tipo definido en el schema
+        //Verificamos que los datos pasados al formulario tengan el tipo definido en el schema, pasamos el schema y los datos que queremos validar
         const result = safeParse(DraftProductsSchema, {
             //Estos datos deben llamarse igual que el atributo name de sus formularios
             name: data.name,
@@ -36,6 +36,22 @@ export const addProduct = async (data : ProductData) => {
             
         }
 
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getProducts = async () => {
+    try {
+        const URL = `${import.meta.env.VITE_API_URL}/products`
+        const { data } = await axios(URL)
+        const result = safeParse(ProductsSchema, data.data)
+
+        if (result.success) {
+            return result.output
+        } else {
+            throw new Error("Hubo un error");
+        }
     } catch (error) {
         console.log(error)
     }

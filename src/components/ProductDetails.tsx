@@ -34,6 +34,6 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
           </button>
         </div>
       </td>
-    </tr>
+    </tr> 
   );
 };

@@ -1,6 +1,7 @@
-import { Link, Form, useActionData, ActionFunctionArgs, redirect } from "react-router-dom";
+import { Link, Form, useActionData, ActionFunctionArgs, redirect, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { addProduct } from "../services/ProductService";
+import { addProduct, getProductByID } from "../services/ProductService";
+import { Product } from "../types/types";
 
 //Funcion para la accion
 export const action = async ({request}: ActionFunctionArgs) => {
@@ -33,10 +34,33 @@ export const action = async ({request}: ActionFunctionArgs) => {
   return redirect('/')
 }
 
+//De esta forma puedes recuperar los parametros pasados a la URL 
+export const loader = async ({params} : LoaderFunctionArgs) => {
+    
+
+    if (params.id !== undefined) {
+      const product = await getProductByID(+params.id)
+      
+      if (!product) {
+        throw new Response('', {status: 404, statusText: 'No encontrado'});
+        
+      }
+
+      return product
+
+    }
+
+}
+
 export const EditProduct = () => {
 
   //Usando el hook useActionData() puedes acceder desde tu componente a lo que sea que la accion a la que esta conectado haya retornado
   const error = useActionData() as string
+  
+  //Este hook nos permite acceder a la informacion retornada desde el loader
+  const product = useLoaderData() as Product
+
+
 
   return (
     <>
@@ -69,6 +93,8 @@ export const EditProduct = () => {
             className="mt-2 block w-full p-3 bg-gray-50"
             placeholder="Nombre del Producto"
             name="name"
+            //De esta forma ponemos la informacion del producto dentro del campo
+            defaultValue={product.name}
           />
         </div>
         <div className="mb-4">
@@ -81,6 +107,8 @@ export const EditProduct = () => {
             className="mt-2 block w-full p-3 bg-gray-50"
             placeholder="Precio Producto. ej. 200, 300"
             name="price"
+            //De esta forma ponemos la informacion del producto dentro del campo
+            defaultValue={product.price}
           />
         </div>
         <input

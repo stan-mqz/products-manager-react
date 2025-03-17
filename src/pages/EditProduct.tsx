@@ -1,73 +1,81 @@
-import { Link, Form, useActionData, ActionFunctionArgs, redirect, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import {
+  Link,
+  Form,
+  useActionData,
+  ActionFunctionArgs,
+  redirect,
+  LoaderFunctionArgs,
+  useLoaderData,
+} from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { addProduct, getProductByID } from "../services/ProductService";
+import { getProductByID, updateProduct } from "../services/ProductService";
 import { Product } from "../types/types";
 
 //Funcion para la accion
-export const action = async ({request}: ActionFunctionArgs) => {
+//El parametro params nos sirve para obtener los parametros pasados a la ruta, tal como con el loader
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   //Forma para obtener los datos del formulario descomponiendo el objeto request y su metodo formData)()
-  const data = Object.fromEntries(await request.formData())
-  
+  const data = Object.fromEntries(await request.formData());
+
   /*
   Los key : value los tomara asi
   key: name del campo en el form
   value: valor introducido en el form
   */
-  
-  let error = ''
 
-  if (Object.values(data).includes('')) {
-    error = 'Todos los campos son obligatorios'
+  let error = "";
+
+  if (Object.values(data).includes("")) {
+    error = "Todos los campos son obligatorios";
   }
 
   //Una vez retornas algo en una accion, esta disponible globalmente para el componente
   if (error) {
-    return error
+    return error;
   }
 
   //Funcion en el archivo de services a la cual le pasamos los datos
 
   //Ejecuta todo el codigo pero se detiene aca, de esa manera el return no se ejecuta hasta que esta funcion termina de ejecutarse
-  await addProduct(data)
+
+  if (params.id !== undefined) {
+    await updateProduct(data, +params.id);
+    console.log(params);
+  }
 
   //Una accion siempre debe retornar algo, en este caso, redirecciona al usuario a la página principal
-  return redirect('/')
-}
+  return redirect("/");
+};
 
-//De esta forma puedes recuperar los parametros pasados a la URL 
-export const loader = async ({params} : LoaderFunctionArgs) => {
-    
+//De esta forma puedes recuperar los parametros pasados a la URL
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  if (params.id !== undefined) {
+    const product = await getProductByID(+params.id);
 
-    if (params.id !== undefined) {
-      const product = await getProductByID(+params.id)
-      
-      if (!product) {
-        throw new Response('', {status: 404, statusText: 'No encontrado'});
-        
-      }
-
-      return product
-
+    if (!product) {
+      throw new Response("", { status: 404, statusText: "No encontrado" });
     }
 
-}
+    return product;
+  }
+};
+
+const availabilityOptions = [
+  { name: "Disponible", value: true },
+  { name: "No Disponible", value: false },
+];
 
 export const EditProduct = () => {
-
   //Usando el hook useActionData() puedes acceder desde tu componente a lo que sea que la accion a la que esta conectado haya retornado
-  const error = useActionData() as string
-  
+  const error = useActionData() as string;
+
   //Este hook nos permite acceder a la informacion retornada desde el loader
-  const product = useLoaderData() as Product
-
-
+  const product = useLoaderData() as Product;
 
   return (
     <>
       <div className="flex justify-between">
-        <h2 className="text-4xl font-black text-slate-500">
-          Editar producto
-        </h2>
+        <h2 className="text-4xl font-black text-slate-500">Editar producto</h2>
 
         <Link
           to="/"
@@ -77,12 +85,9 @@ export const EditProduct = () => {
         </Link>
       </div>
 
-    {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
-      <Form 
-      className="mt-10"
-      method="POST"
-      >
+      <Form className="mt-10" method="POST">
         <div className="mb-4">
           <label className="text-gray-800" htmlFor="name">
             Nombre Producto:
@@ -111,6 +116,25 @@ export const EditProduct = () => {
             defaultValue={product.price}
           />
         </div>
+
+        <div className="mb-4">
+          <label className="text-gray-800" htmlFor="availability">
+            Disponibilidad:
+          </label>
+          <select
+            id="availability"
+            className="mt-2 block w-full p-3 bg-gray-50"
+            name="availability"
+            defaultValue={product?.availability.toString()}
+          >
+            {availabilityOptions.map((option) => (
+              <option key={option.name} value={option.value.toString()}>
+                {option.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <input
           type="submit"
           className="mt-5 w-full bg-indigo-600 p-2 text-white font-bold text-lg cursor-pointer rounded"

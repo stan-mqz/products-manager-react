@@ -3,7 +3,7 @@ import { Layout } from './layouts/Layout'
 import { Products, loader as productsLoader} from './pages/Products'
 //Importar la funcion pero con un alias
 import { NewProduct, action as newProductAction } from './pages/NewProduct'
-import { EditProduct, loader as editProductLoader } from './pages/EditProduct'
+import { EditProduct, loader as editProductLoader, action as editProductAction } from './pages/EditProduct'
 
 export const router = createBrowserRouter([
     //Grupo de paginas que comparten el layout principal
@@ -30,7 +30,8 @@ export const router = createBrowserRouter([
             {
                 path: 'productos/:id/editar', //ROA Pattern - Resource-oriented design
                 element: <EditProduct />,
-                loader: editProductLoader
+                loader: editProductLoader,
+                action: editProductAction
             }
         ]
     }

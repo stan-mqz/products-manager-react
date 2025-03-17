@@ -1,4 +1,5 @@
 import { formatCurrency } from "../helpers";
+import { deleteProduct } from "../services/ProductService";
 import { Product } from "../types/types";
 import { ActionFunctionArgs, Form, useNavigate, redirect } from "react-router-dom";
 
@@ -6,10 +7,18 @@ type ProductDetailsProps = {
   product: Product;
 };
 
-export const action = ({ params }: ActionFunctionArgs) => {
+export const action = async ({ params }: ActionFunctionArgs) => {
 
+  if (params.id !== undefined) {
+
+    await deleteProduct(+params.id)
+    return redirect('/');
  
-  return redirect('/');
+  }
+
+  throw new Error("Producto no encontrado");
+    
+    
 };
 
 export const ProductDetails = ({ product }: ProductDetailsProps) => {
@@ -43,6 +52,11 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
             className="w-full"
             method="POST"
             action={`productos/${product.id}/eliminar`} //Le indicamos que al presionar submit envie los datos a esta URL y que ejecute la accion vinculada a ella, de esta manera lo haces desde el componente en vez del router
+            onSubmit={(e) => { //Esto se ejecuta antes que el action
+              if (!confirm('¿Eliminar?')) {
+                e.preventDefault()
+              }
+            }}
           >
             <input
               type="submit"

@@ -4,6 +4,7 @@ import { Products, loader as productsLoader} from './pages/Products'
 //Importar la funcion pero con un alias
 import { NewProduct, action as newProductAction } from './pages/NewProduct'
 import { EditProduct, loader as editProductLoader, action as editProductAction } from './pages/EditProduct'
+import { ProductDetails, action as deleteProductAction} from './components/ProductDetails'
 
 export const router = createBrowserRouter([
     //Grupo de paginas que comparten el layout principal
@@ -32,6 +33,11 @@ export const router = createBrowserRouter([
                 element: <EditProduct />,
                 loader: editProductLoader,
                 action: editProductAction
+            },
+
+            {
+                path: 'productos/:id/eliminar',
+                action: deleteProductAction
             }
         ]
     }

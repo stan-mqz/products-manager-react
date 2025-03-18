@@ -4,8 +4,7 @@ import {
   parse,
   string,
   transform,
-  pipe,
-  url,
+  pipe
 } from "valibot";
 import {
   DraftProductsSchema,
@@ -121,3 +120,15 @@ export const deleteProduct = async (id: Product["id"]) => {
         console.log(error)
     }
 };
+
+
+export const updateProductAvailability = async (id: Product["id"]) => {
+  try {
+
+    const URL = `${import.meta.env.VITE_API_URL}/products/${id}`
+    await axios.patch(URL)
+    
+  } catch (error) {
+    console.log(error)
+  }
+}

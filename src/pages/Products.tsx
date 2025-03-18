@@ -1,5 +1,5 @@
-import { Link, useLoaderData } from "react-router-dom";
-import { getProducts } from "../services/ProductService";
+import { ActionFunctionArgs, Link, useLoaderData } from "react-router-dom";
+import { getProducts, updateProductAvailability } from "../services/ProductService";
 import { ProductDetails } from "../components/ProductDetails";
 import { Product } from "../types/types";
 
@@ -9,6 +9,16 @@ export const loader = async () => {
   //Al igual que las acciones siempre debe retornar algo, en este caso retornamos los productos desde la funcion getProducts
   return products;
 };
+
+export const action = async ( {request} : ActionFunctionArgs ) => {
+  //Request nos sirve para extraer los datos (values) de los campos del formulario que disparo la accion asociada a la ruta del componente
+  const data = Object.fromEntries(await request.formData())
+
+  //Cuando se ejecuta la accion llama a la funcion y le pasa los datos
+  await updateProductAvailability(+data.id)
+
+  return {}
+}
 
 export const Products = () => {
   //Con este hook, podemos acceder a lo que nuestro loader haya retornado

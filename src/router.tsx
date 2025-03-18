@@ -1,10 +1,10 @@
-import {createBrowserRouter} from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import { Layout } from './layouts/Layout'
-import { Products, loader as productsLoader} from './pages/Products'
+import { Products, loader as productsLoader, action as updateAvailabilityAction } from './pages/Products'
 //Importar la funcion pero con un alias
 import { NewProduct, action as newProductAction } from './pages/NewProduct'
 import { EditProduct, loader as editProductLoader, action as editProductAction } from './pages/EditProduct'
-import { ProductDetails, action as deleteProductAction} from './components/ProductDetails'
+import { action as deleteProductAction } from './components/ProductDetails'
 
 export const router = createBrowserRouter([
     //Grupo de paginas que comparten el layout principal
@@ -16,7 +16,8 @@ export const router = createBrowserRouter([
                 index: true,
                 element: <Products/>,
                 //Cuando se carga este componente manda a llamar la funcion de loader
-                loader: productsLoader
+                loader: productsLoader,
+                action: updateAvailabilityAction
             },
 
             {
